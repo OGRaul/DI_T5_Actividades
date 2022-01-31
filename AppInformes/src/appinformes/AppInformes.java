@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.application.Application;
+import static javafx.application.Application.launch;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -70,7 +71,7 @@ public class AppInformes extends Application {
 
     public void conectaBD() {
         //Establecemos conexión con la BD
-        String baseDatos = "jdbc:hsqldb:hsql://localhost:9001/xdb1";
+        String baseDatos = "jdbc:hsqldb:hsql://localhost/xdb";
         String usuario = "sa";
         String clave = "";
         try {
@@ -94,28 +95,26 @@ public class AppInformes extends Application {
 
     public void generaInforme(TextField tintro) {
         try {
- JasperReport jr = (JasperReport) JRLoader.loadObject(AppInformes.class.getResource("PedidosProd.jasper"));
- //Map de parámetros
- Map parametros = new HashMap();
-        int nproducto = Integer.valueOf(tintro.getText());
-        parametros.put("ParamProducto", nproducto);
+            JasperReport jr
+                    = (JasperReport) JRLoader.loadObject(AppInformes.class.getResource("src/PedidosDeProducto.jasper"));
+            //Map de parámetros
+            Map parametros = new HashMap();
+            int nproducto = Integer.valueOf(tintro.getText());
+            parametros.put("ParamProducto", nproducto);
 
-        JasperPrint jp = (JasperPrint) JasperFillManager.fillReport(jr,
-                parametros, conexion);
-        JasperViewer.viewReport(jp);
+            JasperPrint jp = (JasperPrint) JasperFillManager.fillReport(jr,
+                    parametros, conexion);
+            JasperViewer.viewReport(jp);
+        } catch (JRException ex) {
+            System.out.println("Error al recuperar el jasper");
+            JOptionPane.showMessageDialog(null, ex);
+        }
     }
-    catch (JRException ex
 
-    
-        ) {
- System.out.println("Error al recuperar el jasper");
-        JOptionPane.showMessageDialog(null, ex);
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        launch(args);
     }
-}
-/**
- * @param args the command line arguments
- */
-public static void main(String[] args) {
- launch(args);
- }
 }
