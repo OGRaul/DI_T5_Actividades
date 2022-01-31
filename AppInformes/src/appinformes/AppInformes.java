@@ -33,7 +33,8 @@ import net.sf.jasperreports.view.JasperViewer;
 public class AppInformes extends Application {
 
     public static Connection conexion = null;
-
+    TextField tf = new TextField("ID_CLIENTE");
+    Button btn = new Button();
     @Override
     public void start(Stage primaryStage) {
         //Establece la conexión con la BD
@@ -60,6 +61,7 @@ public class AppInformes extends Application {
 
         //Eventos menuItem
         facturas.setOnAction(e -> {
+            root.getChildren().removeAll(tf, btn);
             try {
                 JasperReport jr = (JasperReport) JRLoader.loadObject(AppInformes.class.getResource("appinformes/Facturas.jasper"));
                 //Map de parámetros
@@ -72,6 +74,7 @@ public class AppInformes extends Application {
             }
         });
         ventasTotales.setOnAction(e -> {
+            root.getChildren().removeAll(tf, btn);
             try {
                 JasperReport jr = (JasperReport) JRLoader.loadObject(AppInformes.class.getResource("appinformes/VentasTotales.jasper"));
                 //Map de parámetros
@@ -85,9 +88,7 @@ public class AppInformes extends Application {
         });
 
         facturasPorClientes.setOnAction(e -> {
-            TextField tf = new TextField("ID_CLIENTE");
-            Button btn = new Button();
-            btn.setText("Generar informe");
+            btn.setText("Introducir");
             root.getChildren().addAll(tf, btn);
 
             btn.setOnAction((ActionEvent a) -> {
@@ -106,6 +107,7 @@ public class AppInformes extends Application {
         });
 
         subinformeFacturas.setOnAction(e -> {
+            root.getChildren().removeAll(tf, btn);
             try {
                 JasperReport jr = (JasperReport) JRLoader.loadObject(AppInformes.class.getResource("appinformes/ListadoFacturas.jasper"));
                 JasperReport jsr = (JasperReport) JRLoader.loadObject(AppInformes.class.getResource("appinformes/SubInformeFacturas.jasper"));
