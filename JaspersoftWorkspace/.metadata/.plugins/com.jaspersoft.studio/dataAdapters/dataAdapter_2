@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="UTF-8"?><jdbcDataAdapter class="net.sf.jasperreports.data.jdbc.JdbcDataAdapterImpl"><name>BDContactos</name><driver>org.hsqldb.jdbcDriver</driver><username>sa</username><password/><savePassword>true</savePassword><url>jdbc:hsqldb:hsql://localhost:9001/xdb</url><database/><serverAddress/></jdbcDataAdapter>

@@ -1,5 +1,7 @@
 package appinformes;
 
+import java.io.File;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -63,7 +65,9 @@ public class AppInformes extends Application {
         facturas.setOnAction(e -> {
             root.getChildren().removeAll(tf, btn);
             try {
-                JasperReport jr = (JasperReport) JRLoader.loadObject(AppInformes.class.getResource("appinformes/Facturas.jasper"));
+                URL url = AppInformes.class.getResource("Facturas.jasper");
+                System.out.println("La url: "+url);
+                JasperReport jr = (JasperReport) JRLoader.loadObject(AppInformes.class.getResource("Facturas.jasper"));
                 //Map de parámetros
                 Map parametros = new HashMap();
                 JasperPrint jp = (JasperPrint) JasperFillManager.fillReport(jr, parametros, conexion);
@@ -76,7 +80,7 @@ public class AppInformes extends Application {
         ventasTotales.setOnAction(e -> {
             root.getChildren().removeAll(tf, btn);
             try {
-                JasperReport jr = (JasperReport) JRLoader.loadObject(AppInformes.class.getResource("appinformes/VentasTotales.jasper"));
+                JasperReport jr = (JasperReport) JRLoader.loadObject(AppInformes.class.getResource("VentasTotales.jasper"));
                 //Map de parámetros
                 Map parametros = new HashMap();
                 JasperPrint jp = (JasperPrint) JasperFillManager.fillReport(jr, parametros, conexion);
@@ -93,10 +97,10 @@ public class AppInformes extends Application {
 
             btn.setOnAction((ActionEvent a) -> {
                 try {
-                    JasperReport jr = (JasperReport) JRLoader.loadObject(AppInformes.class.getResource("appinformes/FacturasPorClientes.jasper"));
+                    JasperReport jr = (JasperReport) JRLoader.loadObject(AppInformes.class.getResource("FacturasPorClientes.jasper"));
                     //Map de parámetros
                     Map parametros = new HashMap();
-                    parametros.put("reportParameter", Integer.parseInt(tf.getText()));
+                    parametros.put("IDCliente", Integer.parseInt(tf.getText()));
                     JasperPrint jp = (JasperPrint) JasperFillManager.fillReport(jr, parametros, conexion);
                     JasperViewer.viewReport(jp);
                 } catch (JRException ex) {
@@ -109,8 +113,8 @@ public class AppInformes extends Application {
         subinformeFacturas.setOnAction(e -> {
             root.getChildren().removeAll(tf, btn);
             try {
-                JasperReport jr = (JasperReport) JRLoader.loadObject(AppInformes.class.getResource("appinformes/ListadoFacturas.jasper"));
-                JasperReport jsr = (JasperReport) JRLoader.loadObject(AppInformes.class.getResource("appinformes/SubInformeFacturas.jasper"));
+                JasperReport jr = (JasperReport) JRLoader.loadObject(AppInformes.class.getResource("ListadoFacturas.jasper"));
+                JasperReport jsr = (JasperReport) JRLoader.loadObject(AppInformes.class.getResource("SubInformeFacturas.jasper"));
                 //Map de parámetros
                 Map parametros = new HashMap();
                 parametros.put("subReportParameter", jsr);
@@ -131,7 +135,7 @@ public class AppInformes extends Application {
     @Override
     public void stop() throws Exception {
         try {
-            DriverManager.getConnection("jdbc:hsqldb:hsql://localhost:9001/xdb1;shutdown=true");
+            DriverManager.getConnection("jdbc:hsqldb:hsql://localhost:9001/xdb;shutdown=true");
         } catch (SQLException ex) {
             System.out.println("No se pudo cerrar la conexion a la BD");
         }
@@ -139,7 +143,7 @@ public class AppInformes extends Application {
 
     public void conectaBD() {
         //Establecemos conexión con la BD
-        String baseDatos = "jdbc:hsqldb:hsql://localhost:9001/xdb1";
+        String baseDatos = "jdbc:hsqldb:hsql://localhost:9001/xdb";
         String usuario = "sa";
         String clave = "";
 
