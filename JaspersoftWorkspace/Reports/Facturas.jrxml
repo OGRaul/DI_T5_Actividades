@@ -247,11 +247,11 @@ FROM "ADDRESS"
 	<pageFooter>
 		<band height="50">
 			<textField>
-				<reportElement x="400" y="10" width="55" height="30" uuid="55c9a753-38d5-42e0-858b-4d9ed14ab8a8"/>
+				<reportElement x="389" y="10" width="55" height="30" uuid="a2ba2fa0-85af-40a9-a1a0-ea9c480c5d7e"/>
 				<textFieldExpression><![CDATA["Pagina "+$V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="455" y="10" width="100" height="30" uuid="37627859-94c7-4cb1-ad60-ea9d33da876e"/>
+			<textField evaluationTime="Report">
+				<reportElement x="444" y="10" width="100" height="30" uuid="a19c1d17-c270-4741-b19b-7c6bffff2a4d"/>
 				<textFieldExpression><![CDATA["de "+$V{PAGE_COUNT}]]></textFieldExpression>
 			</textField>
 		</band>

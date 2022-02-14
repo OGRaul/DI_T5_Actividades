@@ -35,16 +35,17 @@ import net.sf.jasperreports.view.JasperViewer;
 public class AppInformes extends Application {
 
     public static Connection conexion = null;
-    TextField tf = new TextField("ID_CLIENTE");
+    TextField tf = new TextField();
     Button btn = new Button();
     @Override
     public void start(Stage primaryStage) {
         //Establece la conexión con la BD
         conectaBD();
-
+        
         //Crea la escena        
         MenuBar menuBar = new MenuBar();
         Menu menu = new Menu("Informes");
+        tf.setPromptText("Escrbie el ID del cliente");
 
         MenuItem facturas = new MenuItem("Facturas");
         MenuItem ventasTotales = new MenuItem("Ventas Totales");
@@ -65,8 +66,6 @@ public class AppInformes extends Application {
         facturas.setOnAction(e -> {
             root.getChildren().removeAll(tf, btn);
             try {
-                URL url = AppInformes.class.getResource("Facturas.jasper");
-                System.out.println("La url: "+url);
                 JasperReport jr = (JasperReport) JRLoader.loadObject(AppInformes.class.getResource("Facturas.jasper"));
                 //Map de parámetros
                 Map parametros = new HashMap();
@@ -92,7 +91,7 @@ public class AppInformes extends Application {
         });
 
         facturasPorClientes.setOnAction(e -> {
-            btn.setText("Introducir");
+            btn.setText("Introducir ID Cliente");
             root.getChildren().addAll(tf, btn);
 
             btn.setOnAction((ActionEvent a) -> {
@@ -113,15 +112,17 @@ public class AppInformes extends Application {
         subinformeFacturas.setOnAction(e -> {
             root.getChildren().removeAll(tf, btn);
             try {
+                URL url = AppInformes.class.getResource("SubInformeFacturas.jasper");
+                System.out.println("url"+url);
                 JasperReport jr = (JasperReport) JRLoader.loadObject(AppInformes.class.getResource("ListadoFacturas.jasper"));
                 JasperReport jsr = (JasperReport) JRLoader.loadObject(AppInformes.class.getResource("SubInformeFacturas.jasper"));
                 //Map de parámetros
                 Map parametros = new HashMap();
-                parametros.put("subReportParameter", jsr);
+                parametros.put("SubInformeFacturas.jasper", jsr);
                 //Ya tenemos los datos para instanciar un objeto JasperPrint que permite ver, imprimir o exportar a otros formatos
-                JasperPrint jp = (JasperPrint) JasperFillManager.fillReport(jr, parametros, conexion);
+                JasperPrint jp = (JasperPrint) JasperFillManager.fillReport(jr, null, conexion);
                 JasperViewer.viewReport(jp, false);
-            } catch (JRException ex) {
+            } catch (JRException ex) {  
                 Logger.getLogger(AppInformes.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
@@ -135,7 +136,7 @@ public class AppInformes extends Application {
     @Override
     public void stop() throws Exception {
         try {
-            DriverManager.getConnection("jdbc:hsqldb:hsql://localhost:9001/xdb;shutdown=true");
+            DriverManager.getConnection("jdbc:hsqldb:hsql://localhost:9001/xdb1;shutdown=true");
         } catch (SQLException ex) {
             System.out.println("No se pudo cerrar la conexion a la BD");
         }
@@ -143,7 +144,7 @@ public class AppInformes extends Application {
 
     public void conectaBD() {
         //Establecemos conexión con la BD
-        String baseDatos = "jdbc:hsqldb:hsql://localhost:9001/xdb";
+        String baseDatos = "jdbc:hsqldb:hsql://localhost:9001/xdb1";
         String usuario = "sa";
         String clave = "";
 

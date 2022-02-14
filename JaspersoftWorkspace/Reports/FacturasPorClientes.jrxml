@@ -5,7 +5,7 @@
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SampleDB.xml"/>
 	<parameter name="IDCliente" class="java.lang.Integer"/>
 	<queryString language="SQL">
-		<![CDATA[ SELECT "ADDRESS"."FIRSTNAME",
+		<![CDATA[SELECT "ADDRESS"."FIRSTNAME",
 	"ADDRESS"."LASTNAME",
 	"ADDRESS"."ID",
 	"ADDRESS"."STREET",
@@ -242,13 +242,13 @@ ORDER BY "DOCUMENT"."ID" ASC,
 	</detail>
 	<pageFooter>
 		<band height="54" splitType="Stretch">
-			<textField evaluationTime="Page">
-				<reportElement x="444" y="10" width="100" height="30" uuid="cdef5239-2968-48d2-8abd-32d4fc0a449b"/>
-				<textFieldExpression><![CDATA["de "+ $V{PAGE_NUMBER}]]></textFieldExpression>
-			</textField>
 			<textField>
-				<reportElement x="389" y="10" width="55" height="30" uuid="d8f36dcd-dacf-465d-adfd-9506535839e5"/>
+				<reportElement x="389" y="10" width="55" height="30" uuid="073c1b2d-eb56-47e3-b1dd-fbf5b7fb2f4b"/>
 				<textFieldExpression><![CDATA["Pagina "+$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="444" y="10" width="100" height="30" uuid="ad657fb9-6a14-4bbf-b8b0-e50d847ad336"/>
+				<textFieldExpression><![CDATA["de "+$V{PAGE_COUNT}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageFooter>

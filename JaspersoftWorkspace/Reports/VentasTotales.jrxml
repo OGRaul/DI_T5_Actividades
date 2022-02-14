@@ -81,7 +81,7 @@ GROUP BY "PRODUCT"."ID"]]>
 				<reportElement x="389" y="10" width="55" height="30" uuid="fc53d619-1306-4c7d-9180-fe71a89a077a"/>
 				<textFieldExpression><![CDATA["Pagina "+$V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField evaluationTime="Report">
 				<reportElement x="444" y="10" width="100" height="30" uuid="8f99eb82-9e6f-4caa-b676-b0aa063d9a95"/>
 				<textFieldExpression><![CDATA["de "+$V{PAGE_COUNT}]]></textFieldExpression>
 			</textField>
