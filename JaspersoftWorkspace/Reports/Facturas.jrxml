@@ -4,35 +4,27 @@
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SampleDB.xml"/>
 	<queryString language="SQL">
-		<![CDATA[SELECT 
- "ADDRESS"."ID",
-"ADDRESS"."FIRSTNAME",
+		<![CDATA[SELECT "ADDRESS"."FIRSTNAME",
 	"ADDRESS"."LASTNAME",
 	"ADDRESS"."STREET",
-	"ADDRESS"."CITY",
+	"DOCUMENT"."TOTAL",
+	"POSITIONS"."POSITIONNO",
 	"PRODUCT"."NAME",
-	"POSITIONS"."DOCUMENTID",
-	"POSITIONS"."QUANTITY",
 	"POSITIONS"."PRICE",
-	"ADDRESS"."ID"
-FROM "ADDRESS",
-	"DOCUMENT",
-	"POSITIONS",
-	"PRODUCT"
-WHERE 
+	"POSITIONS"."QUANTITY",
+	"ADDRESS"."ID",
+	"DOCUMENT"."ID" as DOCUMENTID
+FROM "ADDRESS"
+	INNER JOIN "DOCUMENT" ON 
 	 "DOCUMENT"."ADDRESSID" = "ADDRESS"."ID" 
-	 AND "DOCUMENT"."ID" = "POSITIONS"."DOCUMENTID" 
-	 AND "POSITIONS"."PRODUCTID" = "PRODUCT"."ID" 
-ORDER BY 
- "ADDRESS"."ID"  asc,
-"DOCUMENT"."ID" ASC,
+	INNER JOIN "POSITIONS" ON 
+	 "POSITIONS"."DOCUMENTID" = "DOCUMENT"."ID" 
+	INNER JOIN "PRODUCT" ON 
+	 "PRODUCT"."ID" = "POSITIONS"."PRODUCTID"
+	 ORDER BY "ADDRESS"."ID" ASC,
+	 "DOCUMENT"."ID" ASC,
 	"POSITIONS"."POSITIONNO" ASC]]>
 	</queryString>
-	<field name="ID" class="java.lang.Integer">
-		<property name="com.jaspersoft.studio.field.name" value="ID"/>
-		<property name="com.jaspersoft.studio.field.label" value="ID"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="ADDRESS"/>
-	</field>
 	<field name="FIRSTNAME" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="FIRSTNAME"/>
 		<property name="com.jaspersoft.studio.field.label" value="FIRSTNAME"/>
@@ -48,19 +40,24 @@ ORDER BY
 		<property name="com.jaspersoft.studio.field.label" value="STREET"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="ADDRESS"/>
 	</field>
-	<field name="CITY" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="CITY"/>
-		<property name="com.jaspersoft.studio.field.label" value="CITY"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="ADDRESS"/>
+	<field name="TOTAL" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="TOTAL"/>
+		<property name="com.jaspersoft.studio.field.label" value="TOTAL"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="DOCUMENT"/>
+	</field>
+	<field name="POSITIONNO" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="POSITIONNO"/>
+		<property name="com.jaspersoft.studio.field.label" value="POSITIONNO"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="POSITIONS"/>
 	</field>
 	<field name="NAME" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="NAME"/>
 		<property name="com.jaspersoft.studio.field.label" value="NAME"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="PRODUCT"/>
 	</field>
-	<field name="DOCUMENTID" class="java.lang.Integer">
-		<property name="com.jaspersoft.studio.field.name" value="DOCUMENTID"/>
-		<property name="com.jaspersoft.studio.field.label" value="DOCUMENTID"/>
+	<field name="PRICE" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="PRICE"/>
+		<property name="com.jaspersoft.studio.field.label" value="PRICE"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="POSITIONS"/>
 	</field>
 	<field name="QUANTITY" class="java.lang.Integer">
@@ -68,15 +65,15 @@ ORDER BY
 		<property name="com.jaspersoft.studio.field.label" value="QUANTITY"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="POSITIONS"/>
 	</field>
-	<field name="PRICE" class="java.math.BigDecimal">
-		<property name="com.jaspersoft.studio.field.name" value="PRICE"/>
-		<property name="com.jaspersoft.studio.field.label" value="PRICE"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="POSITIONS"/>
-	</field>
-	<field name="COLUMN_10" class="java.lang.Integer">
+	<field name="ID" class="java.lang.Integer">
 		<property name="com.jaspersoft.studio.field.name" value="ID"/>
 		<property name="com.jaspersoft.studio.field.label" value="ID"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="ADDRESS"/>
+	</field>
+	<field name="DOCUMENTID" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="ID"/>
+		<property name="com.jaspersoft.studio.field.label" value="DOCUMENTID"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="DOCUMENT"/>
 	</field>
 	<variable name="TOTAL_FACTURA" class="java.lang.Double" resetType="Group" resetGroup="ID_Documento" calculation="Sum">
 		<variableExpression><![CDATA[$F{PRICE}.doubleValue() * $F{QUANTITY}]]></variableExpression>
@@ -155,7 +152,7 @@ ORDER BY
 					<textElement verticalAlignment="Middle">
 						<font size="15" isBold="true"/>
 					</textElement>
-					<text><![CDATA[ID DOCUMENTO:]]></text>
+					<text><![CDATA[DOCUMENTO:]]></text>
 				</staticText>
 				<textField>
 					<reportElement mode="Transparent" x="142" y="14" width="98" height="26" backcolor="#FFFFFF" uuid="f5a53943-3a65-4d16-8011-a01ac8549082"/>
@@ -165,32 +162,32 @@ ORDER BY
 					<textFieldExpression><![CDATA[$F{DOCUMENTID}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="329" y="65" width="112" height="25" uuid="33560e2b-b9ee-4cc6-b14e-a99d9278044f"/>
+					<reportElement x="329" y="50" width="151" height="25" uuid="33560e2b-b9ee-4cc6-b14e-a99d9278044f"/>
 					<textElement verticalAlignment="Middle">
 						<font size="13" isBold="true"/>
 					</textElement>
 					<text><![CDATA[IMPORTE TOTAL]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="114" y="66" width="102" height="24" uuid="005b916a-61ca-4556-80e7-83a39ca0a6d9"/>
-					<textElement verticalAlignment="Middle">
-						<font size="13" isBold="true"/>
-					</textElement>
-					<text><![CDATA[PRECIO]]></text>
-				</staticText>
-				<staticText>
-					<reportElement x="221" y="65" width="102" height="24" uuid="c1f562fa-7449-43c1-8195-09f1d9daf6c0"/>
+					<reportElement x="114" y="50" width="102" height="24" uuid="005b916a-61ca-4556-80e7-83a39ca0a6d9"/>
 					<textElement verticalAlignment="Middle">
 						<font size="13" isBold="true"/>
 					</textElement>
 					<text><![CDATA[CANTIDAD]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="5" y="66" width="102" height="24" uuid="74f1331a-030c-4ea3-8014-95705adaa49d"/>
+					<reportElement x="220" y="50" width="102" height="24" uuid="c1f562fa-7449-43c1-8195-09f1d9daf6c0"/>
 					<textElement verticalAlignment="Middle">
 						<font size="13" isBold="true"/>
 					</textElement>
-					<text><![CDATA[NOMBRE]]></text>
+					<text><![CDATA[PRECIO]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="5" y="50" width="102" height="24" uuid="74f1331a-030c-4ea3-8014-95705adaa49d"/>
+					<textElement verticalAlignment="Middle">
+						<font size="13" isBold="true"/>
+					</textElement>
+					<text><![CDATA[PRODUCTO]]></text>
 				</staticText>
 			</band>
 		</groupHeader>
@@ -228,21 +225,21 @@ ORDER BY
 		</band>
 	</title>
 	<detail>
-		<band height="85" splitType="Stretch">
+		<band height="35" splitType="Stretch">
 			<textField>
-				<reportElement x="106" y="27" width="100" height="30" uuid="73f0bcd6-aced-46d1-aeda-47f77b394fd9"/>
+				<reportElement x="115" y="-3" width="100" height="30" uuid="73f0bcd6-aced-46d1-aeda-47f77b394fd9"/>
 				<textFieldExpression><![CDATA[$F{QUANTITY}]]></textFieldExpression>
 			</textField>
 			<textField pattern="¤#,##0.00;¤-#,##0.00">
-				<reportElement x="336" y="27" width="100" height="30" uuid="22ccaa8c-c605-45f7-ad33-d6c2cb019449"/>
+				<reportElement x="335" y="0" width="100" height="30" uuid="22ccaa8c-c605-45f7-ad33-d6c2cb019449"/>
 				<textFieldExpression><![CDATA[PRODUCT($F{PRICE},$F{QUANTITY})]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="0" y="27" width="100" height="30" uuid="1f792809-99d2-4742-878f-1dffcba0112a"/>
+				<reportElement x="6" y="0" width="100" height="30" uuid="1f792809-99d2-4742-878f-1dffcba0112a"/>
 				<textFieldExpression><![CDATA[$F{NAME}]]></textFieldExpression>
 			</textField>
 			<textField pattern="¤#,##0.00;¤-#,##0.00">
-				<reportElement x="216" y="27" width="100" height="30" uuid="020248d2-150d-4e79-a47f-273dda8f615d"/>
+				<reportElement x="227" y="0" width="100" height="30" uuid="020248d2-150d-4e79-a47f-273dda8f615d"/>
 				<textFieldExpression><![CDATA[$F{PRICE}]]></textFieldExpression>
 			</textField>
 		</band>
