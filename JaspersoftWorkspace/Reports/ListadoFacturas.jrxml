@@ -4,25 +4,12 @@
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SampleDB.xml"/>
 	<queryString language="SQL">
-		<![CDATA[SELECT "ADDRESS"."FIRSTNAME",
-	"ADDRESS"."LASTNAME",
-	"ADDRESS"."STREET",
-	"ADDRESS"."CITY",
-	"PRODUCT"."NAME",
-	"POSITIONS"."DOCUMENTID",
-	"POSITIONS"."QUANTITY",
-	"POSITIONS"."PRICE",
-	"ADDRESS"."ID"
-FROM "ADDRESS",
-	"DOCUMENT",
-	"POSITIONS",
-	"PRODUCT"
-WHERE 
-	 "DOCUMENT"."ADDRESSID" = "ADDRESS"."ID" 
-	 AND "DOCUMENT"."ID" = "POSITIONS"."DOCUMENTID" 
-	 AND "POSITIONS"."PRODUCTID" = "PRODUCT"."ID" 
-ORDER BY "DOCUMENT"."ID" ASC,
-	"POSITIONS"."POSITIONNO" ASC]]>
+		<![CDATA[SELECT "FIRSTNAME",
+	"LASTNAME",
+	"STREET",
+	"ID"
+FROM "ADDRESS"
+ORDER BY "ADDRESS"."ID" ASC]]>
 	</queryString>
 	<field name="FIRSTNAME" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="FIRSTNAME"/>
@@ -39,116 +26,60 @@ ORDER BY "DOCUMENT"."ID" ASC,
 		<property name="com.jaspersoft.studio.field.label" value="STREET"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="ADDRESS"/>
 	</field>
-	<field name="CITY" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="CITY"/>
-		<property name="com.jaspersoft.studio.field.label" value="CITY"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="ADDRESS"/>
-	</field>
-	<field name="NAME" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="NAME"/>
-		<property name="com.jaspersoft.studio.field.label" value="NAME"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="PRODUCT"/>
-	</field>
-	<field name="DOCUMENTID" class="java.lang.Integer">
-		<property name="com.jaspersoft.studio.field.name" value="DOCUMENTID"/>
-		<property name="com.jaspersoft.studio.field.label" value="DOCUMENTID"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="POSITIONS"/>
-	</field>
-	<field name="QUANTITY" class="java.lang.Integer">
-		<property name="com.jaspersoft.studio.field.name" value="QUANTITY"/>
-		<property name="com.jaspersoft.studio.field.label" value="QUANTITY"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="POSITIONS"/>
-	</field>
-	<field name="PRICE" class="java.math.BigDecimal">
-		<property name="com.jaspersoft.studio.field.name" value="PRICE"/>
-		<property name="com.jaspersoft.studio.field.label" value="PRICE"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="POSITIONS"/>
-	</field>
 	<field name="ID" class="java.lang.Integer">
 		<property name="com.jaspersoft.studio.field.name" value="ID"/>
 		<property name="com.jaspersoft.studio.field.label" value="ID"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="ADDRESS"/>
 	</field>
-	<variable name="TOTAL_FACTURA" class="java.lang.Double" resetType="Group" resetGroup="ID_Documento" calculation="Sum">
-		<variableExpression><![CDATA[$F{PRICE}.doubleValue() * $F{QUANTITY}]]></variableExpression>
-		<initialValueExpression><![CDATA[1]]></initialValueExpression>
-	</variable>
-	<variable name="TOTAL_CLIENTE" class="java.lang.Double" resetType="Group" resetGroup="ID_Cliente" calculation="Sum">
-		<variableExpression><![CDATA[$F{PRICE}.doubleValue() * $F{QUANTITY}]]></variableExpression>
-		<initialValueExpression><![CDATA[1]]></initialValueExpression>
-	</variable>
-	<group name="ID_Cliente">
+	<group name="cliente">
 		<groupExpression><![CDATA[$F{ID}]]></groupExpression>
 		<groupHeader>
-			<band height="50">
+			<band height="504">
 				<textField>
-					<reportElement mode="Transparent" x="200" y="10" width="110" height="26" forecolor="#030303" backcolor="#FAFAFA" uuid="a1273734-d4a5-458d-9b31-7a8a066df26c"/>
+					<reportElement mode="Transparent" x="315" y="25" width="112" height="26" forecolor="#030303" backcolor="#FFFFFF" uuid="d5c0807a-6059-4f34-84a1-1244fe84ac9c"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{LASTNAME}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement mode="Transparent" x="15" y="25" width="100" height="26" forecolor="#8A0503" backcolor="#FFFFFF" uuid="8744611b-c60f-4edd-8135-ce9bcc2fd97f"/>
+					<textElement verticalAlignment="Middle">
+						<font size="15" isBold="true"/>
+					</textElement>
+					<text><![CDATA[ID CLIENTE:]]></text>
+				</staticText>
+				<textField>
+					<reportElement mode="Transparent" x="205" y="25" width="110" height="26" forecolor="#030303" backcolor="#FFFFFF" uuid="a7fa676c-70e6-4bd3-ba3c-0ff68df1485b"/>
 					<textElement verticalAlignment="Middle">
 						<font isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{FIRSTNAME}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement mode="Transparent" x="310" y="10" width="112" height="26" forecolor="#030303" backcolor="#FAFAFA" uuid="00bbd67d-e455-4e37-b1f3-5b61a1519340"/>
-					<textElement verticalAlignment="Middle">
-						<font isBold="true"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$F{LASTNAME}]]></textFieldExpression>
-				</textField>
-				<textField>
-					<reportElement mode="Transparent" x="422" y="10" width="118" height="26" forecolor="#030303" backcolor="#FAFAFA" uuid="e1d33243-3f93-4ef2-9936-477644962772"/>
+					<reportElement mode="Transparent" x="427" y="25" width="123" height="26" forecolor="#030303" backcolor="#FFFFFF" uuid="3c425dd5-b848-484c-81ed-61e21e4fbf9f"/>
 					<textElement verticalAlignment="Middle">
 						<font isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{STREET}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement mode="Transparent" x="100" y="10" width="90" height="26" forecolor="#030303" backcolor="#FAFAFA" uuid="a9dca025-5ba5-4d1f-8f69-96c9131f3b24"/>
+					<reportElement mode="Transparent" x="115" y="25" width="90" height="26" forecolor="#8A0503" backcolor="#FFFFFF" uuid="dc7ea4c2-da7e-4dbe-848c-43b477d6ba62"/>
 					<textElement verticalAlignment="Middle">
 						<font size="15" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{ID}]]></textFieldExpression>
 				</textField>
-				<staticText>
-					<reportElement mode="Transparent" x="0" y="10" width="100" height="26" forecolor="#030303" backcolor="#FAFAFA" uuid="3bc0d3aa-d841-44a5-924c-28e088029c24"/>
-					<textElement verticalAlignment="Middle">
-						<font size="15" isBold="true"/>
-					</textElement>
-					<text><![CDATA[ID CLIENTE:]]></text>
-				</staticText>
-			</band>
-		</groupHeader>
-		<groupFooter>
-			<band height="53">
-				<staticText>
-					<reportElement x="120" y="0" width="158" height="30" uuid="49f56cb2-8095-4750-bb33-63cbdb7d6ce9"/>
-					<textElement textAlignment="Left" verticalAlignment="Middle">
-						<font isBold="true"/>
-					</textElement>
-					<text><![CDATA[IMPORTE TOTAL CLIENTE:]]></text>
-				</staticText>
-				<textField pattern="#0.00¤;#0.00- ¤">
-					<reportElement x="278" y="0" width="118" height="30" uuid="7315162e-920b-44e1-a969-50dcfeb600fc"/>
-					<textElement verticalAlignment="Middle">
-						<font isBold="true"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$V{TOTAL_CLIENTE}]]></textFieldExpression>
-				</textField>
-			</band>
-		</groupFooter>
-	</group>
-	<group name="ID_Documento">
-		<groupExpression><![CDATA[$F{DOCUMENTID}]]></groupExpression>
-		<groupHeader>
-			<band height="286">
-				<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.HorizontalRowLayout"/>
 				<subreport>
-					<reportElement x="0" y="0" width="555" height="286" uuid="a2047ba4-8414-4046-9a49-03eaba3bb331"/>
+					<reportElement x="15" y="60" width="535" height="430" uuid="690ca3c3-b78f-4476-8531-e305e228e584"/>
 					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
 					<subreportExpression><![CDATA["SubInformeFacturas.jasper"]]></subreportExpression>
 				</subreport>
 			</band>
 		</groupHeader>
+		<groupFooter>
+			<band height="50"/>
+		</groupFooter>
 	</group>
 	<background>
 		<band splitType="Stretch"/>
