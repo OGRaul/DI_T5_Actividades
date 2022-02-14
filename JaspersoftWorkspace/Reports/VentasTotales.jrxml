@@ -5,50 +5,40 @@
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SampleDB.xml"/>
 	<queryString language="SQL">
 		<![CDATA[SELECT "PRODUCT"."NAME",
-"POSITIONS"."PRICE",
-"POSITIONS"."QUANTITY",
+SUM( "POSITIONS"."QUANTITY") AS "TOTALQ",
 "PRODUCT"."ID"
 FROM "POSITIONS"
 INNER JOIN "PRODUCT" ON 
- "PRODUCT"."ID" = "POSITIONS"."PRODUCTID"]]>
+ "PRODUCT"."ID" = "POSITIONS"."PRODUCTID" 
+GROUP BY "PRODUCT"."ID"]]>
 	</queryString>
 	<field name="NAME" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="NAME"/>
 		<property name="com.jaspersoft.studio.field.label" value="NAME"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="PRODUCT"/>
 	</field>
-	<field name="PRICE" class="java.math.BigDecimal">
-		<property name="com.jaspersoft.studio.field.name" value="PRICE"/>
-		<property name="com.jaspersoft.studio.field.label" value="PRICE"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="POSITIONS"/>
-	</field>
-	<field name="QUANTITY" class="java.lang.Integer">
-		<property name="com.jaspersoft.studio.field.name" value="QUANTITY"/>
-		<property name="com.jaspersoft.studio.field.label" value="QUANTITY"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="POSITIONS"/>
+	<field name="TOTALQ" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="TOTALQ"/>
+		<property name="com.jaspersoft.studio.field.label" value="TOTALQ"/>
 	</field>
 	<field name="ID" class="java.lang.Integer">
 		<property name="com.jaspersoft.studio.field.name" value="ID"/>
 		<property name="com.jaspersoft.studio.field.label" value="ID"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="PRODUCT"/>
 	</field>
-	<variable name="TOTAL_PRODUCTO" class="java.lang.Double" resetType="None" calculation="Sum">
-		<variableExpression><![CDATA[$F{PRICE}.doubleValue() * $F{QUANTITY}]]></variableExpression>
-		<initialValueExpression><![CDATA[1]]></initialValueExpression>
-	</variable>
 	<group name="NOMBRE_PRODUCTO">
 		<groupExpression><![CDATA[$F{NAME}]]></groupExpression>
 		<groupHeader>
-			<band height="50">
+			<band height="52">
 				<textField>
-					<reportElement x="105" y="10" width="100" height="30" uuid="a207f1ef-fe94-4960-9dd2-5b8018b37f1f">
+					<reportElement x="22" y="10" width="100" height="30" uuid="a207f1ef-fe94-4960-9dd2-5b8018b37f1f">
 						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="313706d7-0584-41cd-9557-e24a1dd16d13"/>
 					</reportElement>
 					<textFieldExpression><![CDATA[$F{NAME}]]></textFieldExpression>
 				</textField>
-				<textField pattern="###0.00¤;###0.00- ¤">
-					<reportElement x="360" y="10" width="125" height="30" uuid="65ac2537-1b1e-4ce6-9fc5-27f79dc8bc51"/>
-					<textFieldExpression><![CDATA[$V{TOTAL_PRODUCTO}]]></textFieldExpression>
+				<textField>
+					<reportElement x="380" y="10" width="100" height="30" uuid="20a69661-7fe1-4e47-914e-b8a995f0b8aa"/>
+					<textFieldExpression><![CDATA[$F{TOTALQ}]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupHeader>
@@ -67,8 +57,26 @@ INNER JOIN "PRODUCT" ON
 			</staticText>
 		</band>
 	</title>
+	<columnHeader>
+		<band height="64">
+			<staticText>
+				<reportElement mode="Transparent" x="5" y="30" width="135" height="26" forecolor="#8A0503" backcolor="#FFFFFF" uuid="e236531e-03bc-4969-8268-8526c77fb89f"/>
+				<textElement verticalAlignment="Middle">
+					<font size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PRODUCTO:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="380" y="30" width="135" height="26" forecolor="#8A0503" backcolor="#FFFFFF" uuid="81c44e57-9f72-4434-978b-e8dc1efd421e"/>
+				<textElement verticalAlignment="Middle">
+					<font size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cantidad]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
 	<pageFooter>
-		<band height="50">
+		<band height="40">
 			<textField>
 				<reportElement x="389" y="10" width="55" height="30" uuid="fc53d619-1306-4c7d-9180-fe71a89a077a"/>
 				<textFieldExpression><![CDATA["Pagina "+$V{PAGE_NUMBER}]]></textFieldExpression>
@@ -80,38 +88,34 @@ INNER JOIN "PRODUCT" ON
 		</band>
 	</pageFooter>
 	<summary>
-		<band height="400">
-			<barChart>
-				<chart isShowLegend="false" evaluationTime="Report">
-					<reportElement x="10" y="10" width="535" height="380" uuid="034e1f03-40a4-480d-8e4e-23a9f5d28bc3"/>
-					<chartTitle>
-						<font size="14" isBold="true"/>
-						<titleExpression><![CDATA["TOTAL DE UNIDADES VENDIDAS POR PRODUCTO"]]></titleExpression>
-					</chartTitle>
+		<band height="236">
+			<bar3DChart>
+				<chart evaluationTime="Report">
+					<reportElement x="0" y="25" width="545" height="200" uuid="b4719795-e0d3-437d-8626-c0e50100a0e5"/>
+					<chartTitle/>
 					<chartSubtitle/>
 					<chartLegend/>
 				</chart>
 				<categoryDataset>
 					<dataset resetType="Report"/>
 					<categorySeries>
-						<seriesExpression><![CDATA["SERIES 1"]]></seriesExpression>
-						<categoryExpression><![CDATA[$F{NAME}]]></categoryExpression>
-						<valueExpression><![CDATA[$V{TOTAL_PRODUCTO}]]></valueExpression>
+						<seriesExpression><![CDATA[$F{NAME}]]></seriesExpression>
+						<categoryExpression><![CDATA[""]]></categoryExpression>
+						<valueExpression><![CDATA[$F{TOTALQ}]]></valueExpression>
+						<labelExpression><![CDATA[$F{NAME}]]></labelExpression>
 					</categorySeries>
 				</categoryDataset>
-				<barPlot>
-					<plot orientation="Horizontal">
-						<seriesColor seriesOrder="0" color="#668CCE"/>
-					</plot>
+				<bar3DPlot xOffset="5.0">
+					<plot/>
 					<itemLabel/>
 					<categoryAxisFormat>
-						<axisFormat labelColor="#000000" tickLabelColor="#000000" verticalTickLabels="false" axisLineColor="#000000"/>
+						<axisFormat/>
 					</categoryAxisFormat>
 					<valueAxisFormat>
-						<axisFormat labelColor="#000000" tickLabelColor="#000000" axisLineColor="#000000"/>
+						<axisFormat/>
 					</valueAxisFormat>
-				</barPlot>
-			</barChart>
+				</bar3DPlot>
+			</bar3DChart>
 		</band>
 	</summary>
 </jasperReport>
