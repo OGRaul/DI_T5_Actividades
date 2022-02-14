@@ -5,22 +5,25 @@
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SampleDB.xml"/>
 	<parameter name="IDCliente" class="java.lang.Integer"/>
 	<queryString language="SQL">
-		<![CDATA[SELECT "ADDRESS"."FIRSTNAME",
-"ADDRESS"."LASTNAME",
-"ADDRESS"."STREET",
-"ADDRESS"."CITY",
-"PRODUCT"."NAME",
-"POSITIONS"."DOCUMENTID",
-"POSITIONS"."QUANTITY",
-"POSITIONS"."PRICE",
-"ADDRESS"."ID"
-FROM "ADDRESS",
-"DOCUMENT",
-"POSITIONS",
-"PRODUCT"
-WHERE  "DOCUMENT"."ID" = "POSITIONS"."DOCUMENTID" 
- AND "POSITIONS"."PRODUCTID" = "PRODUCT"."ID"
-  AND "DOCUMENT"."ADDRESSID" = $P{IDCliente}]]>
+		<![CDATA[ SELECT "ADDRESS"."FIRSTNAME",
+	"ADDRESS"."LASTNAME",
+	"ADDRESS"."ID",
+	"ADDRESS"."STREET",
+	"PRODUCT"."NAME",
+	"DOCUMENT"."ID" AS DOCUMENTID,
+	"POSITIONS"."POSITIONNO",
+	"POSITIONS"."QUANTITY",
+	"POSITIONS"."PRICE"
+FROM "POSITIONS"
+	INNER JOIN "DOCUMENT" ON 
+	 "DOCUMENT"."ID" = "POSITIONS"."DOCUMENTID" 
+	INNER JOIN "ADDRESS" ON 
+	 "ADDRESS"."ID" = "DOCUMENT"."ADDRESSID" 
+	INNER JOIN "PRODUCT" ON 
+	 "PRODUCT"."ID" = "POSITIONS"."PRODUCTID" 
+	 WHERE"ADDRESS"."ID" = $P{IDCliente}
+ORDER BY "DOCUMENT"."ID" ASC,
+	"POSITIONS"."POSITIONNO" ASC]]>
 	</queryString>
 	<field name="FIRSTNAME" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="FIRSTNAME"/>
@@ -32,14 +35,14 @@ WHERE  "DOCUMENT"."ID" = "POSITIONS"."DOCUMENTID"
 		<property name="com.jaspersoft.studio.field.label" value="LASTNAME"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="ADDRESS"/>
 	</field>
+	<field name="ID" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="ID"/>
+		<property name="com.jaspersoft.studio.field.label" value="ID"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="ADDRESS"/>
+	</field>
 	<field name="STREET" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="STREET"/>
 		<property name="com.jaspersoft.studio.field.label" value="STREET"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="ADDRESS"/>
-	</field>
-	<field name="CITY" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="CITY"/>
-		<property name="com.jaspersoft.studio.field.label" value="CITY"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="ADDRESS"/>
 	</field>
 	<field name="NAME" class="java.lang.String">
@@ -48,8 +51,13 @@ WHERE  "DOCUMENT"."ID" = "POSITIONS"."DOCUMENTID"
 		<property name="com.jaspersoft.studio.field.tree.path" value="PRODUCT"/>
 	</field>
 	<field name="DOCUMENTID" class="java.lang.Integer">
-		<property name="com.jaspersoft.studio.field.name" value="DOCUMENTID"/>
+		<property name="com.jaspersoft.studio.field.name" value="ID"/>
 		<property name="com.jaspersoft.studio.field.label" value="DOCUMENTID"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="DOCUMENT"/>
+	</field>
+	<field name="POSITIONNO" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="POSITIONNO"/>
+		<property name="com.jaspersoft.studio.field.label" value="POSITIONNO"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="POSITIONS"/>
 	</field>
 	<field name="QUANTITY" class="java.lang.Integer">
@@ -61,11 +69,6 @@ WHERE  "DOCUMENT"."ID" = "POSITIONS"."DOCUMENTID"
 		<property name="com.jaspersoft.studio.field.name" value="PRICE"/>
 		<property name="com.jaspersoft.studio.field.label" value="PRICE"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="POSITIONS"/>
-	</field>
-	<field name="ID" class="java.lang.Integer">
-		<property name="com.jaspersoft.studio.field.name" value="ID"/>
-		<property name="com.jaspersoft.studio.field.label" value="ID"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="ADDRESS"/>
 	</field>
 	<variable name="TOTAL_FACTURA" class="java.lang.Double" resetType="Group" resetGroup="IDDocumento" calculation="Sum">
 		<variableExpression><![CDATA[$F{PRICE}.doubleValue() * $F{QUANTITY}]]></variableExpression>
@@ -138,13 +141,13 @@ WHERE  "DOCUMENT"."ID" = "POSITIONS"."DOCUMENTID"
 	<group name="IDDocumento">
 		<groupExpression><![CDATA[$F{DOCUMENTID}]]></groupExpression>
 		<groupHeader>
-			<band height="90">
+			<band height="95">
 				<textField>
 					<reportElement x="142" y="14" width="98" height="26" backcolor="#FFFFFF" uuid="b09be560-7b45-4895-aaeb-453a461be0c6"/>
 					<textElement verticalAlignment="Middle">
 						<font size="13" isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{DOCUMENTID}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{ID}]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement x="300" y="60" width="82" height="24" uuid="fd48d211-4a55-44ed-9095-2bcd7ef1e7e3"/>
@@ -161,7 +164,7 @@ WHERE  "DOCUMENT"."ID" = "POSITIONS"."DOCUMENTID"
 					<text><![CDATA[ID DOCUMENTO:]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="410" y="60" width="92" height="25" uuid="485cf520-aad0-4ac1-92a8-d652be21df42"/>
+					<reportElement x="410" y="60" width="134" height="25" uuid="485cf520-aad0-4ac1-92a8-d652be21df42"/>
 					<textElement verticalAlignment="Middle">
 						<font size="12" isBold="true"/>
 					</textElement>
@@ -172,14 +175,14 @@ WHERE  "DOCUMENT"."ID" = "POSITIONS"."DOCUMENTID"
 					<textElement verticalAlignment="Middle">
 						<font size="12" isBold="true"/>
 					</textElement>
-					<text><![CDATA[PRECIO]]></text>
+					<text><![CDATA[PPU]]></text>
 				</staticText>
 				<staticText>
 					<reportElement x="60" y="60" width="82" height="24" uuid="c65466e6-345d-4539-9133-693acfa7a88c"/>
 					<textElement verticalAlignment="Middle">
 						<font size="12" isBold="true"/>
 					</textElement>
-					<text><![CDATA[NOMBRE]]></text>
+					<text><![CDATA[PRODUCTO]]></text>
 				</staticText>
 			</band>
 		</groupHeader>
@@ -218,30 +221,30 @@ WHERE  "DOCUMENT"."ID" = "POSITIONS"."DOCUMENTID"
 		</band>
 	</title>
 	<detail>
-		<band height="60" splitType="Stretch">
+		<band height="32" splitType="Stretch">
 			<textField>
-				<reportElement x="300" y="16" width="82" height="29" uuid="009ae952-52a5-4219-8b53-ab38991fb790"/>
+				<reportElement x="299" y="0" width="82" height="29" uuid="009ae952-52a5-4219-8b53-ab38991fb790"/>
 				<textFieldExpression><![CDATA[$F{QUANTITY}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0.00¤;###0.00- ¤">
-				<reportElement x="410" y="16" width="92" height="29" uuid="0b578e27-9d07-40d1-b07b-9f3bfd7ecf8a"/>
+				<reportElement x="410" y="0" width="92" height="29" uuid="0b578e27-9d07-40d1-b07b-9f3bfd7ecf8a"/>
 				<textFieldExpression><![CDATA[$F{PRICE}.doubleValue() * $F{QUANTITY}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="60" y="16" width="82" height="29" uuid="416cd4b3-a6cf-42eb-ba3e-b65ef15ce0ec"/>
+				<reportElement x="60" y="0" width="82" height="29" uuid="416cd4b3-a6cf-42eb-ba3e-b65ef15ce0ec"/>
 				<textFieldExpression><![CDATA[$F{NAME}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0.00¤;###0.00- ¤">
-				<reportElement x="188" y="16" width="82" height="29" uuid="140d5f78-35a5-4b58-9e97-d5bbed6c148c"/>
+				<reportElement x="188" y="0" width="82" height="29" uuid="140d5f78-35a5-4b58-9e97-d5bbed6c148c"/>
 				<textFieldExpression><![CDATA[$F{PRICE}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
 	<pageFooter>
 		<band height="54" splitType="Stretch">
-			<textField>
+			<textField evaluationTime="Page">
 				<reportElement x="444" y="10" width="100" height="30" uuid="cdef5239-2968-48d2-8abd-32d4fc0a449b"/>
-				<textFieldExpression><![CDATA["de "+$V{PAGE_COUNT}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["de "+ $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="389" y="10" width="55" height="30" uuid="d8f36dcd-dacf-465d-adfd-9506535839e5"/>
