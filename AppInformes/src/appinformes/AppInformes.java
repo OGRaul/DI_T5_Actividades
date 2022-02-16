@@ -37,14 +37,16 @@ public class AppInformes extends Application {
     public static Connection conexion = null;
     TextField tf = new TextField();
     Button btn = new Button();
+
     @Override
     public void start(Stage primaryStage) {
         //Establece la conexión con la BD
         conectaBD();
-        
+
         //Crea la escena        
         MenuBar menuBar = new MenuBar();
         Menu menu = new Menu("Informes");
+        Menu menu2 = new Menu("Salir");
         tf.setPromptText("Escrbie el ID del cliente");
 
         MenuItem facturas = new MenuItem("Facturas");
@@ -52,12 +54,17 @@ public class AppInformes extends Application {
         MenuItem facturasPorClientes = new MenuItem("Facturas por Clientes");
         MenuItem subinformeFacturas = new MenuItem("Subinforme Listado Facturas");
 
+        MenuItem salir = new MenuItem("Salir");
+
         menu.getItems().add(facturas);
         menu.getItems().add(ventasTotales);
         menu.getItems().add(facturasPorClientes);
         menu.getItems().add(subinformeFacturas);
 
+        menu2.getItems().add(salir);
+
         menuBar.getMenus().add(menu);
+        menuBar.getMenus().add(menu2);
 
         VBox root = new VBox();
         root.getChildren().addAll(menuBar);
@@ -70,7 +77,7 @@ public class AppInformes extends Application {
                 //Map de parámetros
                 Map parametros = new HashMap();
                 JasperPrint jp = (JasperPrint) JasperFillManager.fillReport(jr, parametros, conexion);
-                JasperViewer.viewReport(jp);
+                JasperViewer.viewReport(jp, false);
             } catch (JRException ex) {
                 System.out.println("Error al recuperar el jasper");
                 JOptionPane.showMessageDialog(null, ex);
@@ -83,7 +90,7 @@ public class AppInformes extends Application {
                 //Map de parámetros
                 Map parametros = new HashMap();
                 JasperPrint jp = (JasperPrint) JasperFillManager.fillReport(jr, parametros, conexion);
-                JasperViewer.viewReport(jp);
+                JasperViewer.viewReport(jp, false);
             } catch (JRException ex) {
                 System.out.println("Error al recuperar el jasper");
                 JOptionPane.showMessageDialog(null, ex);
@@ -101,7 +108,7 @@ public class AppInformes extends Application {
                     Map parametros = new HashMap();
                     parametros.put("IDCliente", Integer.parseInt(tf.getText()));
                     JasperPrint jp = (JasperPrint) JasperFillManager.fillReport(jr, parametros, conexion);
-                    JasperViewer.viewReport(jp);
+                    JasperViewer.viewReport(jp, false);
                 } catch (JRException ex) {
                     System.out.println("Error al recuperar el jasper");
                     JOptionPane.showMessageDialog(null, ex);
@@ -112,18 +119,28 @@ public class AppInformes extends Application {
         subinformeFacturas.setOnAction(e -> {
             root.getChildren().removeAll(tf, btn);
             try {
-                URL url = AppInformes.class.getResource("SubInformeFacturas.jasper");
-                System.out.println("url"+url);
                 JasperReport jr = (JasperReport) JRLoader.loadObject(AppInformes.class.getResource("ListadoFacturas.jasper"));
+                
                 JasperReport jsr = (JasperReport) JRLoader.loadObject(AppInformes.class.getResource("SubInformeFacturas.jasper"));
                 //Map de parámetros
                 Map parametros = new HashMap();
-                parametros.put("SubInformeFacturas.jasper", jsr);
+                parametros.put("SubInformeFacturas", jsr);
+                
                 //Ya tenemos los datos para instanciar un objeto JasperPrint que permite ver, imprimir o exportar a otros formatos
-                JasperPrint jp = (JasperPrint) JasperFillManager.fillReport(jr, null, conexion);
+                JasperPrint jp = (JasperPrint) JasperFillManager.fillReport(jr, parametros, conexion);
+                
                 JasperViewer.viewReport(jp, false);
-            } catch (JRException ex) {  
+            } catch (JRException ex) {
                 Logger.getLogger(AppInformes.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
+
+        salir.setOnAction(e -> {
+            try {
+                stop();
+                System.exit(0);
+            } catch (Exception ex) {
+                System.out.println("No se pudo cerrar la conexion a la BD");
             }
         });
 
@@ -137,6 +154,7 @@ public class AppInformes extends Application {
     public void stop() throws Exception {
         try {
             DriverManager.getConnection("jdbc:hsqldb:hsql://localhost:9001/xdb1;shutdown=true");
+            System.out.println("Conexión cerrada con exito");
         } catch (SQLException ex) {
             System.out.println("No se pudo cerrar la conexion a la BD");
         }
@@ -163,9 +181,10 @@ public class AppInformes extends Application {
             System.exit(1);
         }
     }
+
     /**
      * @param args the command line arguments
-    */
+     */
     public static void main(String[] args) {
         launch(args);
     }
