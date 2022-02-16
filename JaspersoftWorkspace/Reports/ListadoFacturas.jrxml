@@ -71,7 +71,7 @@ ORDER BY "ADDRESS"."ID" ASC]]>
 					<textFieldExpression><![CDATA[$F{ID}]]></textFieldExpression>
 				</textField>
 				<subreport>
-					<reportElement x="15" y="60" width="535" height="430" uuid="690ca3c3-b78f-4476-8531-e305e228e584"/>
+					<reportElement x="20" y="70" width="524" height="434" uuid="1eb98008-740b-4a16-9119-e09ae8b187a3"/>
 					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
 					<subreportExpression><![CDATA["SubInformeFacturas.jasper"]]></subreportExpression>
 				</subreport>

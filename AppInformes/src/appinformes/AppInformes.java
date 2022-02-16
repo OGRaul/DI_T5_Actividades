@@ -1,7 +1,5 @@
 package appinformes;
 
-import java.io.File;
-import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -120,16 +118,18 @@ public class AppInformes extends Application {
             root.getChildren().removeAll(tf, btn);
             try {
                 JasperReport jr = (JasperReport) JRLoader.loadObject(AppInformes.class.getResource("ListadoFacturas.jasper"));
-                
                 JasperReport jsr = (JasperReport) JRLoader.loadObject(AppInformes.class.getResource("SubInformeFacturas.jasper"));
+                System.out.println("hola");
+                
                 //Map de parámetros
                 Map parametros = new HashMap();
-                parametros.put("SubInformeFacturas", jsr);
-                
-                //Ya tenemos los datos para instanciar un objeto JasperPrint que permite ver, imprimir o exportar a otros formatos
-                JasperPrint jp = (JasperPrint) JasperFillManager.fillReport(jr, parametros, conexion);
-                
+                parametros.put("SubReportParameter", jsr);
+
+                //Mostramos el Informe
+                JasperPrint jp = (JasperPrint) JasperFillManager.fillReport(jr, parametros, conexion); //TODO: EL FALLO SALTA AQUI
+               
                 JasperViewer.viewReport(jp, false);
+                
             } catch (JRException ex) {
                 Logger.getLogger(AppInformes.class.getName()).log(Level.SEVERE, null, ex);
             }
